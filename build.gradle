@@ -1,0 +1,84 @@
+// H2Project build.gradle
+apply plugin: 'groovy'
+apply plugin:'application'
+
+def compatibilityVersion = 1.6
+sourceCompatibility = compatibilityVersion
+targetCompatibility = compatibilityVersion
+
+defaultTasks 'clean', 'build', 'installApp', 'startScripts', 'fatJar', 'distTar', 'distZip', 'run'
+
+// project version
+version = "1.0-${new Date().format('yyyyMMdd')}"
+
+mainClassName = "com.jnorthr.H2";   
+
+// groovy plugin needs these declarations
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.0'
+    compile 'org.apache.ivy:ivy:2.3.0'
+
+    // to use h2 in-mem database
+    compile group:'com.h2database', name:'h2',              version:'1.4.185'
+
+    // use slf4j logging features
+    compile group:'org.slf4j',      name:'slf4j-api',       version:'1.6.1'
+    compile group:'ch.qos.logback', name:'logback-classic', version:'0.9.28'
+
+    // use features to make Spock tests happy
+    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+    testCompile 'org.springframework.boot:spring-boot:1.2.1.RELEASE'
+}
+
+test {
+        maxParallelForks = Runtime.getRuntime().availableProcessors()
+        testLogging {
+            showStandardStreams = true
+        }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion '2.3'
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src/main/groovy']
+        }
+    }
+    test {
+        groovy {
+            srcDirs = ['src/test/groovy']
+        }
+    }
+}
+
+//create a single Jar with all dependencies
+task fatJar(type: Jar) {
+	manifest {
+        attributes 'Implementation-Title': 'Sample Groovy Project Using Groovy',  
+        	'Implementation-Version': version,
+        	'Main-Class': 'com.jnorthr.H2'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+task createDocs {
+    def docs = file("$buildDir/docs")
+    outputs.dir docs
+    doLast {
+        docs.mkdirs()
+        new File(docs, "readme.txt").write("H2Project Read me!")
+    }
+}
+
+applicationDistribution.from(createDocs) {
+    into "docs"
+}
