@@ -1,6 +1,6 @@
 # H2Project
 
-[Travis Build Status: ](https://travis-ci.org/jnorthr/H2Project.svg)
+[Travis Build Status: ](https://travis-ci.org/jnorthr/H2Project.svg?branch=master)
 
 A short sample Groovy class w/tests to try the H2 in-memory database feature;
 
