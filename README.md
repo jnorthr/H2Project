@@ -1,5 +1,7 @@
 # H2Project
 
+[Travis Build Status: ](https://travis-ci.org/jnorthr/H2Project.svg)
+
 A short sample Groovy class w/tests to try the H2 in-memory database feature;
 
 Just wanted to give you a starting point to try the H2 in-memory database. I've used the Groovy development language here to setup a set of methods. The whole class named H2 is constructed in the style of a java class with all it's syntax. Ok, it's not exactly a java program. For that you would need to add more syntax.
