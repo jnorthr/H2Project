@@ -1,5 +1,5 @@
 package com.jnorthr;
-import org.springframework.boot.test.OutputCapture;
+import org.springframework.boot.test.rule.OutputCapture;
 
 /*
  * Copyright 2015 the original author or authors.
