@@ -107,15 +107,6 @@ class H2Test extends spock.lang.Specification {
 				count==0;         
     } // end of feature method
 
-    def "Built default H2 then do a method call with a dummy statement"() {
-      when:     'default H2 built, now try sql statement  with bad syntax'
-                int count = h2.run("Hi kids");
-
-      then:  	thrown org.h2.jdbc.JdbcSQLException
-				capture.toString().endsWith("DEBUG com.jnorthr.H2 - running run for sql stmt execute; the cmd is Hi kids \n")
-				count==0;         
-    } // end of feature method
-
 
     def "Built default H2 then do a method call with a partial statement"() {
       when:     'default H2 built, now try sql statement  with bad syntax'
