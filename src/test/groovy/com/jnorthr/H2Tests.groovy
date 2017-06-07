@@ -123,7 +123,7 @@ class H2Test extends spock.lang.Specification {
                 int count = h2.run("select * from data");
 
       then:  	org.h2.jdbc.JdbcSQLException ex = thrown()
-      			ex.message=="Table \"DATA\" not found; SQL statement:\nselect * from data [42102-185]"
+      			ex.message=="Table \"DATA\" not found; SQL statement:\nselect * from data [42102-195]"
 				capture.toString().contains("DEBUG com.jnorthr.H2 - running run for sql stmt execute; the cmd is select * from data")
 				count==0;         
     } // end of feature method
@@ -133,7 +133,7 @@ class H2Test extends spock.lang.Specification {
                 int count = h2.run("select * from ${h2.tablename}");
 
       then:  	org.h2.jdbc.JdbcSQLException ex = thrown()
-      			ex.message=="Table \"DATA\" not found; SQL statement:\nselect * from data [42102-185]"
+      			ex.message=="Table \"DATA\" not found; SQL statement:\nselect * from data [42102-195]"
 				capture.toString().contains("DEBUG com.jnorthr.H2 - running run for sql stmt execute; the cmd is select * from data")
 				count==0;         
     } // end of feature method
@@ -143,7 +143,8 @@ class H2Test extends spock.lang.Specification {
                 int count = h2.run("select * from DATA ");
 
       then:  	org.h2.jdbc.JdbcSQLException ex = thrown()
-      			ex.message=="Table \"DATA\" not found; SQL statement:\nselect * from DATA  [42102-185]"
+      			//println "ex.message="+ex.message
+      			ex.message=="Table \"DATA\" not found; SQL statement:\nselect * from DATA  [42102-195]"
 				capture.toString().contains("DEBUG com.jnorthr.H2 - running run for sql stmt execute; the cmd is select * from DATA")
 				count==0;         
     } // end of feature method
@@ -155,7 +156,7 @@ class H2Test extends spock.lang.Specification {
                 int count = h2.run("select * from ${name}");
  
       then:  	org.h2.jdbc.JdbcSQLException ex = thrown() 
-      			ex.message=="Table \"SOMETHING\" not found; SQL statement:\nselect * from Something [42102-185]"
+      			ex.message=="Table \"SOMETHING\" not found; SQL statement:\nselect * from Something [42102-195]"
 				capture.toString().contains("DEBUG com.jnorthr.H2 - running run for sql stmt execute; the cmd is select * from ")
 				count==0;         
     } // end of feature method

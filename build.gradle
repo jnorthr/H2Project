@@ -6,7 +6,7 @@ def compatibilityVersion = 1.6
 sourceCompatibility = compatibilityVersion
 targetCompatibility = compatibilityVersion
 
-defaultTasks 'clean', 'build', 'installApp', 'startScripts', 'fatJar', 'distTar', 'distZip', 'run'
+defaultTasks 'clean', 'build', 'startScripts', 'fatJar', 'distTar', 'distZip', 'run' // 'installApp',  missing from 3.5 application plugin
 
 // project version
 version = "1.0-${new Date().format('yyyyMMdd')}"
@@ -19,19 +19,20 @@ repositories {
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.7'
+    compile 'org.codehaus.groovy:groovy-all:2.4.11'
     compile 'org.apache.ivy:ivy:2.4.0'
 
     // to use h2 in-mem database
-    compile group:'com.h2database', name:'h2',              version:'1.4.185' // last version to work w/jdk1.6
+    compile group:'com.h2database', name:'h2',              version:'1.4.195' // last version to work w/jdk1.6
 
     // use slf4j logging features
-    compile group:'org.slf4j',      name:'slf4j-api',       version:'1.7.21'
-    compile group:'ch.qos.logback', name:'logback-classic', version:'1.1.7'
+    compile group:'org.slf4j',      name:'slf4j-api',       version:'1.7.25'
+    compile group:'ch.qos.logback', name:'logback-classic', version:'1.2.3'
 
     // use features to make Spock tests happy
-    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4-rc-2'
-    testCompile 'org.springframework.boot:spring-boot-test:1.4.1.RELEASE'
+    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+    //testCompile 'org.springframework.boot:spring-boot-test:1.4.1.RELEASE'
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.5.3.RELEASE'
 }
 
 test {
@@ -42,7 +43,7 @@ test {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion '2.14'
+    gradleVersion '3.5'
 }
 
 sourceSets {
