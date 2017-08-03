@@ -1,12 +1,12 @@
 package com.jnorthr;
 
 // see: http://mrhaki.blogspot.fr/2011/09/groovy-goodness-using-named-ordinal.html
-
+/*
 @GrabConfig(systemClassLoader=true)
 @Grab(group='com.h2database', module='h2', version='1.4.185')
 @Grab(group='org.slf4j', module='slf4j-api', version='1.6.1')
 @Grab(group='ch.qos.logback', module='logback-classic', version='0.9.28')
-
+*/
 import groovy.util.logging.Slf4j
 import groovy.sql.Sql
 

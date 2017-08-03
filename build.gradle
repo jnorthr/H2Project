@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.11'
+    compile 'org.codehaus.groovy:groovy-all:2.4.12'
     compile 'org.apache.ivy:ivy:2.4.0'
 
     // to use h2 in-mem database
