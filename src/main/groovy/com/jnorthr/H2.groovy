@@ -1,15 +1,20 @@
 package com.jnorthr;
 
 // see: http://mrhaki.blogspot.fr/2011/09/groovy-goodness-using-named-ordinal.html
-/*
+
 @GrabConfig(systemClassLoader=true)
 @Grab(group='com.h2database', module='h2', version='1.4.185')
 @Grab(group='org.slf4j', module='slf4j-api', version='1.6.1')
 @Grab(group='ch.qos.logback', module='logback-classic', version='0.9.28')
-*/
+
 import groovy.util.logging.Slf4j
 import groovy.sql.Sql
 
+// timestamp stuff follows
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.*;
+  
 /**
  * Represents an abstraction against an instance of the H2 in-memory database.
  * Used to persist and order info. within a single table.
@@ -277,7 +282,8 @@ public class H2{
     {
         tableOpen=true;
         logmsg("get", "rows",cmd, false)
-        return sql.rows(cmd)
+        def rs = sql.rows(cmd, { meta -> println "===> meta="+meta.getColumnLabel(1)+" :"+meta.getColumnTypeName(1);})
+        return rs;        
     } // end of method
 
 
@@ -363,6 +369,15 @@ public class H2{
     } // end of method
 
 
+    public Timestamp getTimeStamp(String element) throws Exception  
+    {        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+        // error lies here! //
+        Date parsedDate = dateFormat.parse(element);
+        return new Timestamp(parsedDate.getTime());
+    } // end of method
+
+
    /** 
     * Method to run class tests.
     * 
@@ -382,7 +397,7 @@ public class H2{
         log.info "ans=${ans}"
 
         //ans = h2.sql.execute("create table if not exists test (id int, value char)")
-        ans = h2.run("create table if not exists ${h2.tablename} (id int not null, value char)");
+        ans = h2.run("create table if not exists ${h2.tablename} (id int not null, value char, lastModified timestamp  DEFAULT CURRENT_TIMESTAMP)");
         log.info "created ${h2.tablename} ... ans=${ans}"
 
         ans = h2.run("delete from ${h2.tablename}");
@@ -395,22 +410,28 @@ public class H2{
         log.info "----------------------\n"
 
         // add some rows
-        ans = h2.add("insert into ${h2.tablename} values(:id, :value)", [id: 43, value: 'hello 43'])
+        Timestamp ts = h2.getTimeStamp("2012-08-01 01:12:56.0");
+        ans = h2.add("insert into ${h2.tablename} values(:id, :value, :lastModified)", [id: 43, value: 'hello 43', lastModified:ts])
         log.info "ans=${ans}"
 
-        ans = h2.insert("insert into ${h2.tablename} values(:id, :value)", [id: 41, value: 'hello 41']);        
+        ts = h2.getTimeStamp("2013-08-01 01:12:56.0");
+        ans = h2.insert("insert into ${h2.tablename} values(:id, :value, :lastModified)", [id: 41, value: 'hello 41', lastModified:ts]);        
         log.info "ans=${ans}"
 
-        ans = h2.put("insert into ${h2.tablename} values(:id, :value)", [id: 31, value: 'hello 31'])
+        ts = h2.getTimeStamp("2016-12-21 01:12:56.0");
+        ans = h2.put("insert into ${h2.tablename} values(:id, :value, :lastModified)", [id: 31, value: 'hello 31', lastModified:ts])
         log.info "ans=${ans}"
 
-        ans = h2.insert "insert into ${h2.tablename} values(21, 'hello 21')"
+        ts = h2.getTimeStamp("2017-07-01 11:12:56.0");
+        ans = h2.insert "insert into ${h2.tablename} values(21, 'hello 21', '" +ts+"' )"
         log.info "ans=${ans}"
         
-        ans = h2.put("insert into ${h2.tablename} values(:id, :value)", [id: 11, value: 'hello 11'])
+        ts = h2.getTimeStamp("2017-04-04 15:42:56.0");
+        ans = h2.put("insert into ${h2.tablename} values(:id, :value, :lastModified)", [id: 11, value: 'hello 11', lastModified:ts])
         log.info "ans=${ans}"
 
-        ans = h2.add("insert into ${h2.tablename} values(:id, :value)", [id: 1, value: 'hello 1'])
+        ts = h2.getTimeStamp("2017-07-22 22:33:22.0");
+        ans = h2.add("insert into ${h2.tablename} values(:id, :value, :lastModified)", [id: 1, value: 'hello 1', lastModified:ts])
         log.info "ans=${ans}"
 
 
@@ -459,8 +480,8 @@ public class H2{
         def ct=0;
         result = h2.get("select * from ${h2.tablename} where id > 20 order by value").each{e->  println "id=${e.id} value=${e.value}"; ct+=e.id; };
         log.info "result=${result} and ct=$ct"
-
-        log.info "--- the end ---"
+ 
+        log.info "\n--- the end ---"
   } // end of main
 
 } // end of class
