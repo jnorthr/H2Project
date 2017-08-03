@@ -17,15 +17,15 @@ This project is arranged in a folder structure that's compatible with many build
 
 === Folder Layout
 
-* build.gradle - the script gradle uses to go urn the build process
-* gradle.properties - influences the gradle build tool
-* License - what you can/cannot do with this project
-* README.md - this text file
-* build/  - a folder of all the pieces constructed when you do a **gradlew build** command
-* gradle/ - everything needed to make gradle run on your system without installing gradle; Gradle will self-install any missing jars, code, scripts, etc if your system is connected to the internet the first time you do a gradle build command
-* src/
-* /src/main/groovy/com/jnorthr/H2.groovy - the only bit of code with samples of what can be done when working with the H2 database
-* /src/test/groovy/com/jnorthr/H2Tests.groovy - a series of self-testing methods to confirm the H2.groovy class is running correctly.
+* *build.gradle* - the script gradle uses to go urn the build process
+* *gradle.properties* - influences the gradle build tool
+* *License* - what you can/cannot do with this project
+* *README.md* - this text file
+* *build/*  - a folder of all the pieces constructed when you do a **gradlew build** command
+* *gradle/* - everything needed to make gradle run on your system without installing gradle; Gradle will self-install any missing jars, code, scripts, etc if your system is connected to the internet the first time you do a gradle build command
+* *src/*
+* */src/main/groovy/com/jnorthr/H2.groovy* - the only bit of code with samples of what can be done when working with the H2 database
+* */src/test/groovy/com/jnorthr/H2Tests.groovy* - a series of self-testing methods to confirm the H2.groovy class is running correctly.
 
 ''''
 
