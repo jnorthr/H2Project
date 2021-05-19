@@ -1,5 +1,5 @@
 package com.jnorthr;
-import org.springframework.boot.test.rule.OutputCapture;
+import org.springframework.boot.test.system.OutputCaptureRule;
 
 /*
  * Copyright 2015 the original author or authors.
@@ -21,7 +21,7 @@ class H2Test extends spock.lang.Specification {
     H2 h2;
 
 	@org.junit.Rule
-	OutputCapture capture = new OutputCapture()
+	OutputCaptureRule capture = new OutputCaptureRule()
 
 	// run before the first feature method
 	def setupSpec() 

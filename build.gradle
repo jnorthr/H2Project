@@ -2,11 +2,12 @@
 apply plugin: 'groovy'
 apply plugin:'application'
 
-def compatibilityVersion = 1.6
+def compatibilityVersion = 11
 sourceCompatibility = compatibilityVersion
 targetCompatibility = compatibilityVersion
 
 defaultTasks 'clean', 'build', 'startScripts', 'fatJar', 'distTar', 'distZip', 'run' // 'installApp',  missing from 3.5 application plugin
+
 
 // project version
 version = "1.0-${new Date().format('yyyyMMdd')}"
@@ -19,20 +20,20 @@ repositories {
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.12'
-    compile 'org.apache.ivy:ivy:2.4.0'
+    implementation 'org.codehaus.groovy:groovy-all:3.0.8'
+    implementation 'org.apache.ivy:ivy:2.5.0'
 
-    // to use h2 in-mem database
-    compile group:'com.h2database', name:'h2',              version:'1.4.195' // last version to work w/jdk1.6
+    // to use h2 in-meImplementationase
+    implementation group:'com.h2database', name:'h2',              version:'1.4.200' // last version to work w/jdk1.6
 
     // use slf4j logging features
-    compile group:'org.slf4j',      name:'slf4j-api',       version:'1.7.25'
-    compile group:'ch.qos.logback', name:'logback-classic', version:'1.2.3'
+    implementation group:'org.slf4j',      name:'slf4j-api',       version:'1.7.30'
+    implementation group:'ch.qos.logback', name:'logback-classic', version:'1.2.3'
 
     // use features to make Spock tests happy
-    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+    testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
     //testCompile 'org.springframework.boot:spring-boot-test:1.4.1.RELEASE'
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.5.3.RELEASE'
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.4.5'
 }
 
 test {
@@ -42,9 +43,6 @@ test {
         }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion '4.0.1'
-}
 
 sourceSets {
     main {
@@ -61,15 +59,20 @@ sourceSets {
 
 //create a single Jar with all dependencies
 task fatJar(type: Jar) {
+    configurations.implementation.canBeResolved = true
+
 	manifest {
         attributes 'Implementation-Title': 'Sample Groovy Project Using Groovy',  
         	'Implementation-Version': version,
         	'Main-Class': 'com.jnorthr.H2'
     }
     baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    from { configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
-}
+
+    setDuplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+} // end task 
+
 
 task createDocs {
     def docs = file("$buildDir/docs")
